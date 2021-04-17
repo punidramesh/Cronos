@@ -1,13 +1,14 @@
 #/usr/bin/python3
 
 from AppKit import NSWorkspace
-import json, requests, time
+import json, requests, time, os
 from datetime import datetime
-from moropy_cli.moropy import sendCred
 
 timer = {}
 to_send = {}
 base_url = "https://kaalbackend.herokuapp.com/"
+
+userCred = json.load(open(os.path.dirname(os.path.abspath(__file__)) +'/cli/creds.json'))
 
 def process():
     entry = 0
@@ -29,7 +30,7 @@ def process():
             to_send[activeAppName] = elapsed_time
             # print(to_send)
             payload = {
-                "userHash": 'd0b529ed-e312-4170-b64e-a98aced1f531',
+                "userHash": userCred['userHash'],
                 "activities": to_send,
             }
 
