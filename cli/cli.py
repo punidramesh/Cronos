@@ -3,9 +3,6 @@
 import sys
 import os
 
-PACKAGE_PARENT = '..'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
 import datetime
 import json
@@ -16,7 +13,6 @@ import requests
 import subprocess
 
 root_dir = ""
-userId = ""
 credentials_file_name = "creds.json"
 status_file_name = "status"
 base_url = "https://kaalbackend.herokuapp.com/"
@@ -37,7 +33,6 @@ def register_user():
     click.echo()
 
     code = click.prompt("Enter your secret code here", type=str)
-    userId = code
     click.echo()
 
     click.echo("⏱️  Please wait while your code is being validated!")
@@ -66,6 +61,7 @@ def register_user():
     user_data = {
         "userHash": code,
         "userName": response_data['user']['userName'],
+        "pid": "0",
     }
 
     click.secho("✅ Congratulations ", nl=False)
@@ -102,7 +98,7 @@ def checkin():
     click.secho("{}:{}".format(hours, minutes), bold=True)
 
     click.echo()
-    tracker_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+"/track.py"
+    tracker_path = os.path.dirname(os.path.abspath(__file__))+"/track.py"
     click.echo("🧐 Getting some popcorn! 🍿 It's interesting to watch you work!")
     subprocess.call("python3 " + tracker_path+" &", shell=True)
     # subprocess.call("nohup ./ticker.py &", shell=True)
@@ -132,7 +128,7 @@ def checkout():
     click.secho("{}:{}".format(hours, minutes), bold=True)
 
     click.echo()
-
+    subprocess.call("kill -9 "+ str(user_data['pid']),shell=True)
     click.echo("😌 Great work today! Going to sleep! Bye! 🙌")
     
 
