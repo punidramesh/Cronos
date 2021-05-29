@@ -29,7 +29,7 @@ def read_user_data():
 @click.command('register')
 def register_user():
 
-    click.echo("👋 Welcome to Cronos!")
+    click.echo("👋 Welcome to Kaal !")
     click.echo()
 
     code = click.prompt("Enter your secret code here", type=str)
@@ -128,7 +128,9 @@ def checkout():
     click.secho("{}:{}".format(hours, minutes), bold=True)
 
     click.echo()
-    subprocess.call("kill -9 "+ str(user_data['pid']),shell=True)
+    with open('creds.json') as f:
+        data = json.load(f)
+    subprocess.call("kill -9 "+ str(data['pid']),shell=True)
     click.echo("😌 Great work today! Going to sleep! Bye! 🙌")
     
 
